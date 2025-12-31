@@ -2,11 +2,13 @@ import { useState, useMemo, useEffect } from 'react';
 import { translations, getCategoryMap } from './lib/translations';
 import { initialRoutes } from './data/routes';
 import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute, deleteRoute } from './lib/firebase';
+import { callGemini, buildPrompt } from './lib/gemini';
 
 import Header from './components/Header';
 import Stats from './components/Stats';
 import RouteCard from './components/RouteCard';
 import BottomNav from './components/BottomNav';
+import AIModal from './components/AIModal';
 import RouteDetail from './components/RouteDetail';
 import AddRouteForm from './components/AddRouteForm';
 
@@ -18,6 +20,8 @@ export default function App() {
     const [userRoutes, setUserRoutes] = useState([]);
     const [viewingRoute, setViewingRoute] = useState(null);
     const [activeTab, setActiveTab] = useState('home');
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiResponse, setAiResponse] = useState(null);
 
     // New route form
     const [newRouteForm, setNewRouteForm] = useState({
@@ -45,12 +49,39 @@ export default function App() {
 
     // Lock body scroll when modals are open
     useEffect(() => {
-        if (viewingRoute) {
+        if (viewingRoute || aiResponse) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
         }
-    }, [viewingRoute]);
+    }, [viewingRoute, aiResponse]);
+
+    const handleMagicFill = async () => {
+        if (!newRouteForm.link) return;
+        setAiLoading(true);
+
+        const { prompt, system } = buildPrompt('magic', { ...newRouteForm, title: newRouteForm.title || "Ruta de Mapy" }, [], t);
+
+        try {
+            const response = await callGemini(prompt, system);
+            const jsonMatch = response.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const data = JSON.parse(jsonMatch[0]);
+                setNewRouteForm(prev => ({
+                    ...prev,
+                    title: data.title || prev.title,
+                    desc: data.desc || prev.desc,
+                    dist: data.dist || prev.dist,
+                    time: data.time || prev.time
+                }));
+            }
+        } catch (err) {
+            console.error("Magic fill error:", err);
+            setAiResponse(t.aiError);
+        } finally {
+            setAiLoading(false);
+        }
+    };
 
 
 
@@ -155,7 +186,9 @@ export default function App() {
                         user={user}
                         newRouteForm={newRouteForm}
                         setNewRouteForm={setNewRouteForm}
+                        onMagicFill={handleMagicFill}
                         onSave={handleSaveRoute}
+                        aiLoading={aiLoading}
                     />
                 )}
             </main>
@@ -167,6 +200,13 @@ export default function App() {
             />
 
 
+
+            <AIModal
+                t={t}
+                aiLoading={aiLoading}
+                aiResponse={aiResponse}
+                onClose={() => setAiResponse(null)}
+            />
 
             <RouteDetail
                 t={t}

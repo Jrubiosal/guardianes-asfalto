@@ -1,4 +1,4 @@
-import { PlusCircle, Loader2, Save } from 'lucide-react';
+import { PlusCircle, Loader2, Save, Sparkles } from 'lucide-react';
 import { categories } from '../lib/translations';
 
 export default function AddRouteForm({
@@ -6,7 +6,9 @@ export default function AddRouteForm({
     user,
     newRouteForm,
     setNewRouteForm,
-    onSave
+    onMagicFill,
+    onSave,
+    aiLoading
 }) {
     return (
         <div className="space-y-6 pb-20 max-w-xl mx-auto">
@@ -43,6 +45,15 @@ export default function AddRouteForm({
                             onChange={(e) => setNewRouteForm({ ...newRouteForm, title: e.target.value })}
                         />
                     </div>
+
+                    <button
+                        onClick={onMagicFill}
+                        disabled={!newRouteForm.link || aiLoading}
+                        className="w-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-indigo-600/30 transition-all disabled:opacity-30 active:scale-95 shadow-lg shadow-indigo-600/10"
+                    >
+                        {aiLoading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                        {t.magicBtn}
+                    </button>
                 </div>
 
                 <div className="bg-[#1a1d23] rounded-3xl p-6 border border-slate-800 space-y-4 shadow-xl">
