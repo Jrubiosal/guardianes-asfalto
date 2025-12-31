@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from 'react';
 import { translations, getCategoryMap } from './lib/translations';
 import { initialRoutes } from './data/routes';
 import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute, deleteRoute } from './lib/firebase';
-import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute, deleteRoute } from './lib/firebase';
 
 import Header from './components/Header';
 import Stats from './components/Stats';
@@ -58,7 +57,6 @@ export default function App() {
     const handleSaveRoute = async () => {
         if (!newRouteForm.title || !newRouteForm.link || !user) return;
 
-        setAiLoading(true);
         const newRoute = {
             title: newRouteForm.title,
             link: newRouteForm.link,
