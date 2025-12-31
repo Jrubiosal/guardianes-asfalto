@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { translations, getCategoryMap } from './lib/translations';
 import { initialRoutes } from './data/routes';
-import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute } from './lib/firebase';
+import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute, deleteRoute } from './lib/firebase';
 import { callGemini, buildPrompt } from './lib/gemini';
 
 import Header from './components/Header';
@@ -124,6 +124,17 @@ export default function App() {
         }
     };
 
+    const handleDeleteRoute = async (routeId) => {
+        if (!window.confirm(t.confirmBorrar)) return;
+        try {
+            await deleteRoute(routeId);
+            setViewingRoute(null);
+        } catch (error) {
+            console.error("Error deleting route:", error);
+            setAiResponse(t.aiError);
+        }
+    };
+
     const filteredRoutes = useMemo(() => {
         return allRoutes.filter(route => {
             const matchesSearch = route.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -220,6 +231,7 @@ export default function App() {
                 route={viewingRoute}
                 onClose={() => setViewingRoute(null)}
                 onAIAction={handleAIAction}
+                onDelete={handleDeleteRoute}
             />
         </div>
     );

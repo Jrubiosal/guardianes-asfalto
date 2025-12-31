@@ -51,7 +51,10 @@ export const translations = {
         safetyPrompt: "Analiza la seguridad y dificultad técnica de la ruta '[TITLE]'. Da una puntuación del 1 al 10 y 3 consejos críticos para evitar accidentes en este trazado específico.",
         stopsPrompt: "Sugiere 3 lugares estratégicos (vistas, café o descanso) para parar durante la ruta '[TITLE]'. Sé creativo basado en los pueblos que cruza.",
         magicPrompt: "He encontrado una ruta motera. El título es: [TITLE]. El enlace es: [URL]. Por favor, genera una descripción épica y corta (máximo 2 líneas), estima la distancia total en KM (solo el número) y el tiempo total de duración en moto. Devuélvelo estrictamente en este formato JSON: {\"desc\": \"...\", \"dist\": 123, \"time\": \"...\"}",
-        systemInstruction: "Eres el 'Capitán de Ruta IA' del club 'Guardianes del Asfalto'. Hablas de forma coloquial, motivadora y experta. Responde siempre en CASTELLANO."
+        systemInstruction: "Eres el 'Capitán de Ruta IA' del club 'Guardianes del Asfalto'. Hablas de forma coloquial, motivadora y experta. Respon siempre en CASTELLANO.",
+        borrar: "Borrar",
+        confirmBorrar: "¿Seguro que quieres borrar esta ruta?",
+        eliminar: "Eliminar del Club"
     },
     ca: {
         title: "Guardians",
@@ -105,7 +108,10 @@ export const translations = {
         safetyPrompt: "Analitza la seguretat i dificultat tècnica de la ruta '[TITLE]'. Dóna una puntuació de l'1 al 10 i 3 consells crítics per evitar accidents en aquest traçat específic.",
         stopsPrompt: "Suggereix 3 llocs estratègics (vistes, cafè o descans) per parar durant la ruta '[TITLE]'. Sigues creatiu basat en els pobles que creua.",
         magicPrompt: "He trobat una ruta motera. El títol és: [TITLE]. L'enllaç és: [URL]. Si us plau, genera una descripció èpica i curta (màxim 2 línies), estima la distància total en KM (només el número) i el temps total de durada en moto. Torna-ho estrictament en aquest format JSON: {\"desc\": \"...\", \"dist\": 123, \"time\": \"...\"}",
-        systemInstruction: "Ets el 'Capità de Ruta IA' del club 'Guardianes del Asfalto'. Parles de forma col·loquial, motivadora i experta. Respon sempre en CATALÀ."
+        systemInstruction: "Ets el 'Capità de Ruta IA' del club 'Guardianes del Asfalto'. Parles de forma col·loquial, motivadora i experta. Respon sempre en CATALÀ.",
+        borrar: "Esborrar",
+        confirmBorrar: "Segur que vols esborrar aquesta ruta?",
+        eliminar: "Eliminar del Club"
     }
 };
 

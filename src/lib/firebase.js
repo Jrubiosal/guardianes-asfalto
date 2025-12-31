@@ -2,7 +2,7 @@
 // Replace with your own Firebase config or use environment variables
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, query } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc } from 'firebase/firestore';
 
 // Firebase config - Replace with your actual config
 const firebaseConfig = {
@@ -93,6 +93,16 @@ export const addRoute = async (route, userId) => {
         return docRef.id;
     } catch (error) {
         console.error("Error saving route:", error);
+        throw error;
+    }
+};
+
+export const deleteRoute = async (routeId) => {
+    if (!db) return;
+    try {
+        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_routes', routeId));
+    } catch (error) {
+        console.error("Error deleting route:", error);
         throw error;
     }
 };

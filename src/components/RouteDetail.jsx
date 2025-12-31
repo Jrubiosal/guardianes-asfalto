@@ -1,9 +1,9 @@
 import {
     X, MapPin, Clock, ArrowUpRight, AlertTriangle,
-    CheckSquare, HardHat, Coffee
+    CheckSquare, HardHat, Coffee, Trash2
 } from 'lucide-react';
 
-export default function RouteDetail({ t, route, onClose, onAIAction }) {
+export default function RouteDetail({ t, route, onClose, onAIAction, onDelete }) {
     if (!route) return null;
 
     return (
@@ -85,6 +85,15 @@ export default function RouteDetail({ t, route, onClose, onAIAction }) {
                             {route.desc}
                         </p>
                     </div>
+
+                    {route.id && (
+                        <button
+                            onClick={() => onDelete(route.id)}
+                            className="w-full mb-3 bg-red-600/10 border border-red-500/20 text-red-500 py-4 rounded-3xl font-black flex items-center justify-center gap-3 active:scale-95 transition-all text-[11px] uppercase tracking-[0.2em] hover:bg-red-600/20"
+                        >
+                            <Trash2 size={18} /> {t.eliminar}
+                        </button>
+                    )}
 
                     <a
                         href={route.link}
