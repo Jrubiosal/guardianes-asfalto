@@ -2,14 +2,12 @@ import { useState, useMemo, useEffect } from 'react';
 import { translations, getCategoryMap } from './lib/translations';
 import { initialRoutes } from './data/routes';
 import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute, deleteRoute } from './lib/firebase';
-import { callGemini, buildPrompt } from './lib/gemini';
+import { initAuth, subscribeToAuthChanges, subscribeToUserRoutes, addRoute, deleteRoute } from './lib/firebase';
 
 import Header from './components/Header';
 import Stats from './components/Stats';
 import RouteCard from './components/RouteCard';
 import BottomNav from './components/BottomNav';
-import AIBanner from './components/AIBanner';
-import AIModal from './components/AIModal';
 import RouteDetail from './components/RouteDetail';
 import AddRouteForm from './components/AddRouteForm';
 
@@ -21,8 +19,6 @@ export default function App() {
     const [userRoutes, setUserRoutes] = useState([]);
     const [viewingRoute, setViewingRoute] = useState(null);
     const [activeTab, setActiveTab] = useState('home');
-    const [aiLoading, setAiLoading] = useState(false);
-    const [aiResponse, setAiResponse] = useState(null);
 
     // New route form
     const [newRouteForm, setNewRouteForm] = useState({
@@ -50,54 +46,14 @@ export default function App() {
 
     // Lock body scroll when modals are open
     useEffect(() => {
-        if (viewingRoute || aiResponse) {
+        if (viewingRoute) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
         }
-    }, [viewingRoute, aiResponse]);
+    }, [viewingRoute]);
 
-    const handleAIAction = async (type, route = null) => {
-        setAiLoading(true);
-        const { prompt, system } = buildPrompt(type, route, allRoutes, t);
 
-        try {
-            const response = await callGemini(prompt, system);
-            setAiResponse(response);
-        } catch (err) {
-            console.error("AI Error:", err);
-            setAiResponse(t.aiError);
-        } finally {
-            setAiLoading(false);
-        }
-    };
-
-    const handleMagicFill = async () => {
-        if (!newRouteForm.title || !newRouteForm.link) return;
-        setAiLoading(true);
-
-        const { prompt, system } = buildPrompt('magic', newRouteForm, allRoutes, t);
-
-        try {
-            const response = await callGemini(prompt, system);
-            // Try to parse JSON from response
-            const jsonMatch = response.match(/\{[\s\S]*\}/);
-            if (jsonMatch) {
-                const data = JSON.parse(jsonMatch[0]);
-                setNewRouteForm(prev => ({
-                    ...prev,
-                    desc: data.desc || prev.desc,
-                    dist: data.dist || prev.dist,
-                    time: data.time || prev.time
-                }));
-            }
-        } catch (err) {
-            console.error("Magic fill error:", err);
-            setAiResponse(t.aiError);
-        } finally {
-            setAiLoading(false);
-        }
-    };
 
     const handleSaveRoute = async () => {
         if (!newRouteForm.title || !newRouteForm.link || !user) return;
@@ -118,9 +74,6 @@ export default function App() {
             setActiveTab('home');
         } catch (error) {
             console.error("Error saving route:", error);
-            setAiResponse(t.aiError);
-        } finally {
-            setAiLoading(false);
         }
     };
 
@@ -131,7 +84,6 @@ export default function App() {
             setViewingRoute(null);
         } catch (error) {
             console.error("Error deleting route:", error);
-            setAiResponse(t.aiError);
         }
     };
 
@@ -166,7 +118,7 @@ export default function App() {
             <main className="p-4 space-y-6">
                 {activeTab === 'home' && (
                     <>
-                        <AIBanner t={t} onRecommend={() => handleAIAction('recommend')} />
+
 
                         <Stats
                             t={t}
@@ -205,9 +157,7 @@ export default function App() {
                         user={user}
                         newRouteForm={newRouteForm}
                         setNewRouteForm={setNewRouteForm}
-                        onMagicFill={handleMagicFill}
                         onSave={handleSaveRoute}
-                        aiLoading={aiLoading}
                     />
                 )}
             </main>
@@ -216,21 +166,14 @@ export default function App() {
                 t={t}
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
-                onAIClick={() => handleAIAction('recommend')}
             />
 
-            <AIModal
-                t={t}
-                aiLoading={aiLoading}
-                aiResponse={aiResponse}
-                onClose={() => setAiResponse(null)}
-            />
+
 
             <RouteDetail
                 t={t}
                 route={viewingRoute}
                 onClose={() => setViewingRoute(null)}
-                onAIAction={handleAIAction}
                 onDelete={handleDeleteRoute}
             />
         </div>

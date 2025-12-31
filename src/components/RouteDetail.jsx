@@ -1,9 +1,8 @@
 import {
-    X, MapPin, Clock, ArrowUpRight, AlertTriangle,
-    CheckSquare, HardHat, Coffee, Trash2
+    X, MapPin, Clock, ArrowUpRight, Trash2
 } from 'lucide-react';
 
-export default function RouteDetail({ t, route, onClose, onAIAction, onDelete }) {
+export default function RouteDetail({ t, route, onClose, onDelete }) {
     if (!route) return null;
 
     return (
@@ -35,34 +34,6 @@ export default function RouteDetail({ t, route, onClose, onAIAction, onDelete })
                     <h2 className="text-3xl font-black text-white leading-tight mb-8 italic tracking-tight">
                         {route.title}
                     </h2>
-
-                    {/* AI Action Buttons */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 text-left">
-                        <button
-                            onClick={() => onAIAction('briefing', route)}
-                            className="bg-blue-600/10 border border-blue-500/30 text-blue-400 py-3.5 px-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-blue-600/20"
-                        >
-                            <AlertTriangle size={14} /> {t.briefing}
-                        </button>
-                        <button
-                            onClick={() => onAIAction('checklist', route)}
-                            className="bg-emerald-600/10 border border-emerald-500/30 text-emerald-400 py-3.5 px-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-emerald-600/20"
-                        >
-                            <CheckSquare size={14} /> {t.checklist}
-                        </button>
-                        <button
-                            onClick={() => onAIAction('safety', route)}
-                            className="bg-orange-600/10 border border-orange-500/30 text-orange-400 py-3.5 px-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-orange-600/20"
-                        >
-                            <HardHat size={14} /> {t.seguridad}
-                        </button>
-                        <button
-                            onClick={() => onAIAction('stops', route)}
-                            className="bg-purple-600/10 border border-purple-500/30 text-purple-400 py-3.5 px-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all hover:bg-purple-600/20"
-                        >
-                            <Coffee size={14} /> {t.paradas}
-                        </button>
-                    </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-8">
                         <div className="bg-[#242933] p-5 rounded-3xl border border-slate-800 shadow-sm transition-transform hover:scale-[1.02] text-left">

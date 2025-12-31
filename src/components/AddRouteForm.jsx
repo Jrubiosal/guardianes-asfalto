@@ -1,4 +1,4 @@
-import { PlusCircle, AlertTriangle, Sparkles, Loader2, Save } from 'lucide-react';
+import { PlusCircle, Loader2, Save } from 'lucide-react';
 import { categories } from '../lib/translations';
 
 export default function AddRouteForm({
@@ -6,9 +6,7 @@ export default function AddRouteForm({
     user,
     newRouteForm,
     setNewRouteForm,
-    onMagicFill,
-    onSave,
-    aiLoading
+    onSave
 }) {
     return (
         <div className="space-y-6 pb-20 max-w-xl mx-auto">
@@ -45,15 +43,6 @@ export default function AddRouteForm({
                             onChange={(e) => setNewRouteForm({ ...newRouteForm, title: e.target.value })}
                         />
                     </div>
-
-                    <button
-                        onClick={onMagicFill}
-                        disabled={!newRouteForm.title || !newRouteForm.link || aiLoading}
-                        className="w-full bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-indigo-600/30 transition-all disabled:opacity-30 active:scale-95 shadow-lg shadow-indigo-600/10"
-                    >
-                        {aiLoading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
-                        {t.magicBtn}
-                    </button>
                 </div>
 
                 <div className="bg-[#1a1d23] rounded-3xl p-6 border border-slate-800 space-y-4 shadow-xl">
@@ -106,10 +95,10 @@ export default function AddRouteForm({
 
                     <button
                         onClick={onSave}
-                        disabled={!newRouteForm.title || !newRouteForm.link || !user || aiLoading}
+                        disabled={!newRouteForm.title || !newRouteForm.link || !user}
                         className="w-full bg-orange-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs italic shadow-xl shadow-orange-600/20 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 hover:bg-orange-700"
                     >
-                        {aiLoading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        <Save size={18} />
                         {t.guardar}
                     </button>
                 </div>
